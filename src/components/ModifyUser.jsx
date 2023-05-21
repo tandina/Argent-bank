@@ -22,6 +22,11 @@ export default function UpdateProfile() {
         return;
       }
 
+      if (newFirstName.length < 2 || newLastName.length < 2) {
+        alert("First name and last name must be at least 2 characters long");
+        return;
+      }
+
       const response = await fetch(
         "http://localhost:3001/api/v1/user/profile",
         {

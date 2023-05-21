@@ -1,9 +1,9 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   title: Bank Argent API documentation
   description: Contains all available API endpoints in this codebase
-  version: '1.0.0'
-  termsOfService: 'http://swagger.io/terms/'
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
 host: localhost:3001
 basePath: /api/v1
 schemes:
@@ -21,17 +21,17 @@ paths:
           description: Login Payload
           required: true
           schema:
-            $ref: '#/definitions/Login'
+            $ref: "#/definitions/Login"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Login Successfully
           schema:
-            $ref: '#/definitions/LoginResponse'
-        '400':
+            $ref: "#/definitions/LoginResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
   /user/signup:
     post:
@@ -45,17 +45,17 @@ paths:
           description: Signup Payload
           required: true
           schema:
-            $ref: '#/definitions/User'
+            $ref: "#/definitions/User"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Signup Successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+            $ref: "#/definitions/ApiResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
   /user/profile:
     post:
@@ -70,17 +70,17 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
-          type: 'string'
+          type: "string"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User profile retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+            $ref: "#/definitions/ApiResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
     put:
       security:
@@ -94,23 +94,23 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
-          type: 'string'
+          type: "string"
         - in: body
           name: body
           description: Update user profile attributes
           required: true
           schema:
-            $ref: '#/definitions/UserProfile'
+            $ref: "#/definitions/UserProfile"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User profile retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+            $ref: "#/definitions/ApiResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
   /user/profile/transaction:
     get:
@@ -129,16 +129,36 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User transactions retrieved successfully
           schema:
             type: array
             items:
-              $ref: '#/definitions/Transaction'
-        '400':
+              $ref: "#/definitions/Transaction"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
+  /user/profile/transaction/month:
+    get:
+      summary: display all transactions for the current month
+      parameters:
+        - name: month
+          in: query
+          description: acutal month transactions
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successfully returns the list of transactions for the current month
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Month"
+        "400":
+          description: Invalid request - Incorrect month format
+        "500":
+          description: Server error - Unable to retrieve transactions
   /user/profile/transaction/{id}:
     get:
       security:
@@ -157,17 +177,17 @@ paths:
           name: id
           type: integer
           required: true
-          description: 'ID of the transaction to get'
+          description: "ID of the transaction to get"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User Transaction retrieved successfully
           schema:
-            $ref: '#/definitions/Transaction'
-        '400':
+            $ref: "#/definitions/Transaction"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
     put:
       security:
@@ -186,23 +206,58 @@ paths:
           name: id
           type: integer
           required: true
-          description: 'ID of the transaction to update'
+          description: "ID of the transaction to update"
         - in: body
           name: body
           description: Update user transaction
           required: true
           schema:
-            $ref: '#/definitions/TransactionUpdate'
+            $ref: "#/definitions/TransactionUpdate"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User Transaction updated successfully
           schema:
-            $ref: '#/definitions/Transaction'
-        '400':
+            $ref: "#/definitions/Transaction"
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
+          description: Internal Server Error
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module Transaction
+      summary: User Transaction API
+      description: API for updating a user transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: "ID of the transaction to update"
+        - in: body
+          name: body
+          description: Update user transaction
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionUpdate"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Transaction updated successfully
+          schema:
+            $ref: "#/definitions/Transaction"
+        "400":
+          description: Invalid Fields
+        "500":
           description: Internal Server Error
     delete:
       security:
@@ -221,15 +276,15 @@ paths:
           name: id
           type: integer
           required: true
-          description: 'ID of the transaction to delete'
+          description: "ID of the transaction to delete"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: User Transaction deleted successfully
-        '400':
+        "400":
           description: Invalid Fields
-        '500':
+        "500":
           description: Internal Server Error
 securityDefinitions:
   Bearer:
@@ -317,3 +372,16 @@ definitions:
       description:
         type: string
         description: updated transaction description
+  Month:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction ID
+      amount:
+        type: number
+        description: Transaction amount
+      date:
+        type: string
+        format: date
+        description: Transaction date
